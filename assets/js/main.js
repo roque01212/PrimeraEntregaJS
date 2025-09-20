@@ -11,7 +11,6 @@ const menu = () => {
     "1. Agregar contacto\n2. Ver contactos\n3. Eliminar contacto\n4. Editar contacto\n5. Salir"
   );
 
-  console.log(typeof opciones);
   return parseInt(opciones);
 };
 
