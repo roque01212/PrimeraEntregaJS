@@ -33,7 +33,7 @@ const verContactos = () => {
     alert("No hay contactos en la agenda. Agrega al menos uno.");
     return;
   }
-  for (contacto of agenda) {
+  for (let contacto of agenda) {
     console.log(`Nombre: ${contacto[0]}, Teléfono: ${contacto[1]}`);
   }
 };
@@ -110,9 +110,11 @@ const editarContacto = () => {
     alert("Edicion cancelada");
   }
 };
+let intentos = 3;
 
-while (opciones !== 5) {
+while (opciones !== 5 && intentos > 0) {
   opciones = menu();
+
   switch (opciones) {
     case 1:
       agregarContacto();
@@ -130,7 +132,10 @@ while (opciones !== 5) {
       alert("Muchas Gracias. ");
       break;
     default:
-      alert("Opción Incorrecta");
+      intentos--;
+      intentos !== 0
+        ? alert(`Opción Incorrecta te quedan ${intentos} intentos`)
+        : alert("Has superado el número de intentos permitidos.");
       break;
   }
 }
