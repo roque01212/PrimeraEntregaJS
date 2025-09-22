@@ -1,9 +1,25 @@
-const agenda = [];
+const nombres = [],
+  telefonos = [];
 let opciones;
+let intentos = 3;
 
 // coloar todo a minuscula y sacar los espacios
 const normalizar = (nombre) =>
   typeof nombre === "string" && nombre.trim().toLowerCase();
+
+const buscarNombre = (nombre) => {
+  let i = 0;
+  let indice = -1;
+  let encontrado = false;
+  while (i < nombres.length && !encontrado) {
+    if (nombres[i] === nombre) {
+      indice = i;
+      encontrado = true;
+    }
+    i++;
+  }
+  return indice;
+};
 
 // muestro las opciones del menu
 const menu = () => {
@@ -19,22 +35,27 @@ const agregarContacto = () => {
   const nombreIngresado = prompt("Ingrese el nombre del contacto");
   if (nombreIngresado === null) return;
   const nombre = normalizar(nombreIngresado);
-  const telefono = prompt("Ingrese el número de telefono del contacto");
 
-  if (telefono === null) return;
-  const contacto = [nombre, telefono.trim()];
-  agenda.push(contacto);
+  const telefonoIngresado = prompt(
+    "Ingrese el número de telefono del contacto"
+  );
+  if (telefonoIngresado === null) return;
+  const telefono = telefonoIngresado.trim();
+
+  nombres.push(nombre);
+  telefonos.push(telefono);
+
   alert(`Contacto ${nombre}, Teléfono: ${telefono} agregado`);
 };
 
 // muestro todos los contactos
 const verContactos = () => {
-  if (agenda.length === 0) {
+  if (nombres.length === 0) {
     alert("No hay contactos en la agenda. Agrega al menos uno.");
     return;
   }
-  for (let contacto of agenda) {
-    console.log(`Nombre: ${contacto[0]}, Teléfono: ${contacto[1]}`);
+  for (let i = 0; i < nombres.length; i++) {
+    console.log(`Nombre: ${nombres[i]}, Teléfono: ${telefonos[i]}`);
   }
 };
 
@@ -47,7 +68,7 @@ const confirmacionEliminacion = () => {
 // funcion para eliminar el contacto
 const eliminarContacto = () => {
   // verifico que alla contactos en la agenda
-  if (agenda.length === 0) {
+  if (nombres.length === 0) {
     alert("No hay contactos en la agenda. Agrega al menos uno.");
     return;
   }
@@ -55,14 +76,16 @@ const eliminarContacto = () => {
   if (nombreIngresado === null) return;
   const nombre = normalizar(nombreIngresado);
 
-  const index = agenda.findIndex((contacto) => contacto[0] === nombre);
+  const index = buscarNombre(nombre);
   if (index === -1) {
     alert(`Contacto ${nombre} no encontrado`);
     return;
   }
+
   // verifico si acepta eliminar o no el contaco
   if (confirmacionEliminacion()) {
-    agenda.splice(index, 1);
+    nombres.splice(index, 1);
+    telefonos.splice(index, 1);
     alert(`Contacto ${nombre} eliminado`);
   } else {
     alert("Eliminación cancelada");
@@ -77,15 +100,16 @@ const confirmacionEditar = () => {
 
 // Funcion para editar un contacto existente
 const editarContacto = () => {
-  if (agenda.length === 0) {
+  if (nombres.length === 0) {
     alert("No hay contactos en la agenda. Agregue al menos uno.");
     return;
   }
+
   const nombreIngresado = prompt("Cual es el nombre del contacto a editar?");
   if (nombreIngresado === null) return;
   const nombre = normalizar(nombreIngresado);
 
-  const index = agenda.findIndex((contacto) => contacto[0] === nombre);
+  const index = buscarNombre(nombre);
   if (index === -1) {
     alert(`Contacto ${nombre} no encontrado en la agenda`);
     return;
@@ -93,6 +117,7 @@ const editarContacto = () => {
 
   const nuevoNombreIngresado = prompt("Nuevo nombre del contacto");
   if (nuevoNombreIngresado === null) return;
+
   const nuevoTelefonoIngresado = prompt(
     "Nuevo número de telefono del contacto"
   );
@@ -100,9 +125,10 @@ const editarContacto = () => {
 
   if (confirmacionEditar()) {
     const nuevoNombre = normalizar(nuevoNombreIngresado);
-    const index = agenda.findIndex((contacto) => contacto[0] === nombre);
+    const index = buscarNombre(nombre);
 
-    agenda[index] = [nuevoNombre, nuevoTelefonoIngresado];
+    nombres[index] = nuevoNombre;
+    telefonos[index] = nuevoTelefonoIngresado;
     alert(
       `Contacto ${nombre} editado a ${nuevoNombre} Teléfono: ${nuevoTelefonoIngresado}`
     );
@@ -110,7 +136,6 @@ const editarContacto = () => {
     alert("Edicion cancelada");
   }
 };
-let intentos = 3;
 
 while (opciones !== 5 && intentos > 0) {
   opciones = menu();
@@ -121,6 +146,7 @@ while (opciones !== 5 && intentos > 0) {
       break;
     case 2:
       verContactos();
+      s;
       break;
     case 3:
       eliminarContacto();
